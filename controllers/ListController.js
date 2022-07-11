@@ -234,4 +234,52 @@ module.exports = class ListController{
             res.status(500).json({mensage: error})
         }
     }
+    
+    static async updateItem(req, res){
+        const id = req.params.id
+        let updateListData = {}
+
+        //check id valid
+        if(!id || !ObjectId.isValid(id)){
+            res.status(422).json({mensage: 'ID inválido'})
+            return
+        }
+
+        
+        //check list exist
+        const list = await List.findOne({_id: id})
+        
+        if(!list){
+            res.status(404).json({mensage: 'Lista não encontrado'})
+            return
+        }
+        
+        // get List owner
+        const token = getToken(req)
+        const userCurrent = await getUserByToken(token)
+
+        if(!(list.users.includes(userCurrent.email) || list.owner.email === userCurrent.email)){
+            res.status(404).json({mensage: 'Você não tem permição pra editar esta lista.'})
+            return
+        }
+
+        updateListData = list
+
+        const { itens } = req.body
+
+
+        updateListData.itens = itens
+
+
+        try {
+            await List.findByIdAndUpdate(id, updateListData)
+            res.status(201).json({
+                mensage: 'Lista atualizada com sucesso!',
+                updateListData
+            })
+            
+        } catch (error) {
+            res.status(500).json({mensage: error})
+        }
+    }
 }
