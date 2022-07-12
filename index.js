@@ -23,4 +23,4 @@ app.use('/user',UserRoutes)
 app.use('/list',ListRoutes)
 // app.use('/standardlist',StandardListRoutes)
 
-app.listen(5000)
+app.listen(3333)
