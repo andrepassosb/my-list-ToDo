@@ -282,4 +282,42 @@ module.exports = class ListController{
             res.status(500).json({message: error})
         }
     }
+
+    static async getItem(req, res){
+        const id = req.params.id
+
+        //check id valid
+        if(!id || !ObjectId.isValid(id)){
+            res.status(422).json({message: 'ID inválido'})
+            return
+        }
+
+        
+        //check list exist
+        const list = await List.findOne({_id: id})
+        
+        if(!list){
+            res.status(404).json({message: 'Lista não encontrado'})
+            return
+        }
+        
+        // get List owner
+        const token = getToken(req)
+        const userCurrent = await getUserByToken(token)
+
+        if(!(list.users.includes(userCurrent.email) || list.owner.email === userCurrent.email)){
+            res.status(404).json({message: 'Você não tem permição pra ver esta lista.'})
+            return
+        }
+
+        try {
+            res.status(201).json({
+                message: 'Requisição bem sucessida!',
+                list
+            })
+            
+        } catch (error) {
+            res.status(500).json({message: error})
+        }
+    }
 }

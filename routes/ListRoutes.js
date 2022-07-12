@@ -11,6 +11,7 @@ router.patch('/:id', verifyToken, ListController.updateList);
 router.delete('/:id', verifyToken, ListController.deleteList);
 
 //Itens
+router.get('/:id/item', verifyToken, ListController.getItem);
 router.post('/:id/item', verifyToken, ListController.createItem);
 router.patch('/:id/item', verifyToken, ListController.updateItem);
 
