@@ -14,7 +14,7 @@ module.exports = class ListController{
 
         //Validations
         if(!name){
-            res.status(422).json({mensage: 'O nome é obrigatório'})
+            res.status(422).json({message: 'O nome é obrigatório'})
             return
         }
 
@@ -23,7 +23,7 @@ module.exports = class ListController{
             for (const userEmail of users) {
                 const user = await User.findOne({"email": userEmail})
                 if(!user){
-                    res.status(404).json({mensage: `Nenhum usuário com o email: ${userEmail} foi encontrado`})
+                    res.status(404).json({message: `Nenhum usuário com o email: ${userEmail} foi encontrado`})
                     return
                 }
             };
@@ -47,12 +47,12 @@ module.exports = class ListController{
 
             const newList = await list.save()
             res.status(201).json({
-                mensage: 'Lista cadastrada com sucesso!',
+                message: 'Lista cadastrada com sucesso!',
                 newList
             })
             
         } catch (error) {
-            res.status(500).json({mensage: error})
+            res.status(500).json({message: error})
         }
     }
 
@@ -78,7 +78,7 @@ module.exports = class ListController{
 
         //check id valid
         if(!id || !ObjectId.isValid(id)){
-            res.status(422).json({mensage: 'ID inválido'})
+            res.status(422).json({message: 'ID inválido'})
             return
         }
 
@@ -87,7 +87,7 @@ module.exports = class ListController{
         const list = await List.findOne({_id: id})
         
         if(!list){
-            res.status(404).json({mensage: 'Lista não encontrado'})
+            res.status(404).json({message: 'Lista não encontrado'})
             return
         }
         
@@ -96,7 +96,7 @@ module.exports = class ListController{
         const userCurrent = await getUserByToken(token)
 
         if(!(list.users.includes(userCurrent.email) || list.owner.email === userCurrent.email)){
-            res.status(404).json({mensage: 'Você não tem permição pra editar esta lista.'})
+            res.status(404).json({message: 'Você não tem permição pra editar esta lista.'})
             return
         }
 
@@ -106,7 +106,7 @@ module.exports = class ListController{
 
         //Validations
         if(!name){
-            res.status(422).json({mensage: 'O nome é obrigatório'})
+            res.status(422).json({message: 'O nome é obrigatório'})
             return
         }else{
             updateListData.name = name
@@ -117,7 +117,7 @@ module.exports = class ListController{
             for (const userEmail of users) {
                 const user = await User.findOne({"email": userEmail})
                 if(!user){
-                    res.status(404).json({mensage: `Nenhum usuário com o email: ${userEmail} foi encontrado`})
+                    res.status(404).json({message: `Nenhum usuário com o email: ${userEmail} foi encontrado`})
                     return
                 }
             };
@@ -129,12 +129,12 @@ module.exports = class ListController{
 
             await List.findByIdAndUpdate(id, updateListData)
             res.status(201).json({
-                mensage: 'Lista atualizada com sucesso!',
+                message: 'Lista atualizada com sucesso!',
                 updateListData
             })
             
         } catch (error) {
-            res.status(500).json({mensage: error})
+            res.status(500).json({message: error})
         }
 
     }
@@ -144,7 +144,7 @@ module.exports = class ListController{
 
         //check id valid
         if(!id || !ObjectId.isValid(id)){
-            res.status(422).json({mensage: 'ID inválido'})
+            res.status(422).json({message: 'ID inválido'})
             return
         }
 
@@ -153,7 +153,7 @@ module.exports = class ListController{
         const list = await List.findOne({_id: id})
         
         if(!list){
-            res.status(404).json({mensage: 'Lista não encontrado'})
+            res.status(404).json({message: 'Lista não encontrado'})
             return
         }
         
@@ -162,16 +162,16 @@ module.exports = class ListController{
         const userCurrent = await getUserByToken(token)
 
         if(list.owner.email !== userCurrent.email){
-            res.status(404).json({mensage: 'Você não tem permição pra deletar esta lista.'})
+            res.status(404).json({message: 'Você não tem permição pra deletar esta lista.'})
             return
         }
 
         try {
             await List.findByIdAndRemove(id)
     
-            res.status(200).json({mensage: 'Lista removido com sucesso!'})
+            res.status(200).json({message: 'Lista removido com sucesso!'})
         } catch (error) {
-            res.status(500).json({mensage: error})
+            res.status(500).json({message: error})
         }
 
     }
@@ -184,7 +184,7 @@ module.exports = class ListController{
 
         //check id valid
         if(!id || !ObjectId.isValid(id)){
-            res.status(422).json({mensage: 'ID inválido'})
+            res.status(422).json({message: 'ID inválido'})
             return
         }
 
@@ -193,7 +193,7 @@ module.exports = class ListController{
         const list = await List.findOne({_id: id})
         
         if(!list){
-            res.status(404).json({mensage: 'Lista não encontrado'})
+            res.status(404).json({message: 'Lista não encontrado'})
             return
         }
         
@@ -202,7 +202,7 @@ module.exports = class ListController{
         const userCurrent = await getUserByToken(token)
 
         if(!(list.users.includes(userCurrent.email) || list.owner.email === userCurrent.email)){
-            res.status(404).json({mensage: 'Você não tem permição pra editar esta lista.'})
+            res.status(404).json({message: 'Você não tem permição pra editar esta lista.'})
             return
         }
 
@@ -212,7 +212,7 @@ module.exports = class ListController{
 
         //Validations
         if(!name){
-            res.status(422).json({mensage: 'O nome é obrigatório'})
+            res.status(422).json({message: 'O nome é obrigatório'})
             return
         }else{
             updateListData.itens.push({
@@ -226,12 +226,12 @@ module.exports = class ListController{
         try {
             await List.findByIdAndUpdate(id, updateListData)
             res.status(201).json({
-                mensage: 'Lista atualizada com sucesso!',
+                message: 'Lista atualizada com sucesso!',
                 updateListData
             })
             
         } catch (error) {
-            res.status(500).json({mensage: error})
+            res.status(500).json({message: error})
         }
     }
     
@@ -241,7 +241,7 @@ module.exports = class ListController{
 
         //check id valid
         if(!id || !ObjectId.isValid(id)){
-            res.status(422).json({mensage: 'ID inválido'})
+            res.status(422).json({message: 'ID inválido'})
             return
         }
 
@@ -250,7 +250,7 @@ module.exports = class ListController{
         const list = await List.findOne({_id: id})
         
         if(!list){
-            res.status(404).json({mensage: 'Lista não encontrado'})
+            res.status(404).json({message: 'Lista não encontrado'})
             return
         }
         
@@ -259,7 +259,7 @@ module.exports = class ListController{
         const userCurrent = await getUserByToken(token)
 
         if(!(list.users.includes(userCurrent.email) || list.owner.email === userCurrent.email)){
-            res.status(404).json({mensage: 'Você não tem permição pra editar esta lista.'})
+            res.status(404).json({message: 'Você não tem permição pra editar esta lista.'})
             return
         }
 
@@ -274,12 +274,12 @@ module.exports = class ListController{
         try {
             await List.findByIdAndUpdate(id, updateListData)
             res.status(201).json({
-                mensage: 'Lista atualizada com sucesso!',
+                message: 'Lista atualizada com sucesso!',
                 updateListData
             })
             
         } catch (error) {
-            res.status(500).json({mensage: error})
+            res.status(500).json({message: error})
         }
     }
 }

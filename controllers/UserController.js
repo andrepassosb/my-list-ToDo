@@ -13,23 +13,23 @@ module.exports = class UserController {
 
         //Validations
         if(!name){
-            res.status(422).json({mensage: 'O nome é obrigatório'})
+            res.status(422).json({message: 'O nome é obrigatório'})
             return
         }
         if(!email){
-            res.status(422).json({mensage: 'O e-mail é obrigatório'})
+            res.status(422).json({message: 'O e-mail é obrigatório'})
             return
         }
         if(!password){
-            res.status(422).json({mensage: 'A senha é obrigatório'})
+            res.status(422).json({message: 'A senha é obrigatório'})
             return
         }
         if(!confirmpassword){
-            res.status(422).json({mensage: 'A confirmação da senha é obrigatório'})
+            res.status(422).json({message: 'A confirmação da senha é obrigatório'})
             return
         }
         if(password !== confirmpassword ){
-            res.status(422).json({mensage: 'A senha e confirmação da senha precisam ser iguais'})
+            res.status(422).json({message: 'A senha e confirmação da senha precisam ser iguais'})
             return
         }
 
@@ -37,7 +37,7 @@ module.exports = class UserController {
         const userExists = await User.findOne({ email: email })
 
         if(userExists){
-            res.status(422).json({mensage: 'Email já cadastrado, utilizr outro email.'})
+            res.status(422).json({message: 'Email já cadastrado, utilizar outro email.'})
             return
         }
 
@@ -56,7 +56,7 @@ module.exports = class UserController {
             await createUserToken(newUser, req, res)
             res.status(201).json({message:'Usuário criado com sucesso!'})
         } catch(error){
-            res.status(500).json({mensage:error})
+            res.status(500).json({message:error})
         }
     }
 
@@ -64,18 +64,18 @@ module.exports = class UserController {
         const { email, password } = req.body
 
         if(!email){
-            res.status(422).json({mensage: 'O e-mail é obrigatório'})
+            res.status(422).json({message: 'O e-mail é obrigatório'})
             return
         }
         if(!password){
-            res.status(422).json({mensage: 'A senha é obrigatório'})
+            res.status(422).json({message: 'A senha é obrigatório'})
             return
         }
         // check if user exists
         const user = await User.findOne({ email: email })
 
         if(!user){
-            res.status(422).json({mensage: 'Não há usuário cadastrado com este email'})
+            res.status(422).json({message: 'Não há usuário cadastrado com este email'})
             return
         }
 
@@ -83,7 +83,7 @@ module.exports = class UserController {
         const checkPassword = await bcrypt.compare(password, user.password)
 
         if(!checkPassword){
-            res.status(422).json({mensage: 'Senha inválida.'})
+            res.status(422).json({message: 'Senha inválida.'})
             return
         }
 
@@ -96,7 +96,7 @@ module.exports = class UserController {
                 userId: user._id
             })
         } catch (error) {
-            res.status(422).json({mensage: error})
+            res.status(422).json({message: error})
             return
         }
 
@@ -127,12 +127,12 @@ module.exports = class UserController {
             const user = await User.findById(id).select("-password")
             
             if(!user){
-                res.status(422).json({mensage: 'Usuário não encontrado !'})
+                res.status(422).json({message: 'Usuário não encontrado !'})
                 return
             }
             res.status(200).json({ user })
         } catch (error) {
-            res.status(422).json({mensage: error})
+            res.status(422).json({message: error})
             return
         }
 
@@ -145,7 +145,7 @@ module.exports = class UserController {
         const user = await getUserByToken(token)
 
         if(!user){
-            res.status(422).json({mensage: 'Usuário não encontrado !'})
+            res.status(422).json({message: 'Usuário não encontrado !'})
             return
         }
 
@@ -153,13 +153,13 @@ module.exports = class UserController {
 
         //Validations
         if(!name){
-            res.status(422).json({mensage: 'O nome é obrigatório'})
+            res.status(422).json({message: 'O nome é obrigatório'})
             return
         }
         user.name = name
 
         if(!email){
-            res.status(422).json({mensage: 'O e-mail é obrigatório'})
+            res.status(422).json({message: 'O e-mail é obrigatório'})
             return
         }
 
@@ -167,14 +167,14 @@ module.exports = class UserController {
         const userExists = await User.findOne({ email: email })
 
         if(user.email !== email && userExists){
-            res.status(422).json({mensage: 'Email já cadastrado, utilizar outro email.'})
+            res.status(422).json({message: 'Email já cadastrado, utilizar outro email.'})
             return
         }
         user.email = email
 
 
         if(password !== confirmpassword ){
-            res.status(422).json({mensage: 'A senha e confirmação da senha precisam ser iguais'})
+            res.status(422).json({message: 'A senha e confirmação da senha precisam ser iguais'})
             return
         }else if(password && password === confirmpassword){
             const salt = await bcrypt.genSalt(12)
