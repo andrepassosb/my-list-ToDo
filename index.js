@@ -7,9 +7,25 @@ const app = express();
 app.use(express.json());
 
 //Solve CORS
+var allowedOrigins = [
+  "http://localhost:3000",
+  "http://naya-caju-list.vercel.app",
+];
 app.use(
-  cors({ credentials: true, origin: "https://naya-caju-list.vercel.app" })
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        var msg =
+          "The CORS policy for this site does not " +
+          "allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+  })
 );
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 //Routes
 const UserRoutes = require("./routes/UserRoutes");
