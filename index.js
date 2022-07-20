@@ -22,5 +22,4 @@ app.use("/user", UserRoutes);
 app.use("/list", ListRoutes);
 // app.use('/standardlist',StandardListRoutes)
 
-var port = process.env.PORT || 8080;
-app.listen(port);
+app.listen(3000);
