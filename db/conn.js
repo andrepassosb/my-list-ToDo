@@ -1,10 +1,19 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-async function main(){
-    await mongoose.connect('mongodb://localhost:27017/mytodolist')
-    console.log('Conectou!')
+const mongoAtlasUri = process.env.URI_MONGO_ATLAS;
+
+async function main() {
+  try {
+    mongoose.connect(
+      mongoAtlasUri,
+      { useNewUrlParser: true, useUnifiedTopology: true },
+      () => console.log(" Mongoose is connected !")
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-main().catch(err => console.log(err))
+main().catch((err) => console.log(err));
 
-module.exports = mongoose
+module.exports = mongoose;

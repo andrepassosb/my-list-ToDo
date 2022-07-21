@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 
+require("dotenv").config();
+
 const app = express();
 
 //Config json response
@@ -21,4 +23,5 @@ app.use("/user", UserRoutes);
 app.use("/list", ListRoutes);
 // app.use('/standardlist',StandardListRoutes)
 
-app.listen(3000);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log(`Server is running in port ${PORT}`));
